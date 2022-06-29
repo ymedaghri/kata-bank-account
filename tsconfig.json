@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "ts-node": {
+    "transpileOnly": true
+  },
+  "compilerOptions": {
+    "outDir": "./dist",
+    "allowJs": false,
+    "target": "es6",
+    "sourceMap": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true
+  },
+  "include": ["./src/**/*.ts", "./test/**/*.ts"],
+  "exclude": ["node_modules"]
+}
