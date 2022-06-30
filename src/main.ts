@@ -1,3 +1,5 @@
 import { init, start } from "./server";
+import {Bank} from "./Bank";
 
-init().then(() => start());
+const bankApplication = new Bank()
+init(bankApplication).then(() => start());

@@ -8,7 +8,7 @@ describe("smoke test", async () => {
     let server: Server;
 
     before(async () => {
-        server = await init()
+        server = await init(bankApplication)
         await start()
     })
     after(async () => {

@@ -1,11 +1,13 @@
 'use strict';
 
 import * as Hapi from "@hapi/hapi";
-import {index} from "./routes";
+import {index, getAccount} from "./routes";
+import {Bank} from "./Bank";
+import {Server} from "@hapi/hapi";
 
 export let server: Hapi.Server;
 
-export const init = async function (): Promise<Hapi.Server> {
+export const init = async function (bankApplication: Bank): Promise<Server> {
     server = Hapi.server({
         port: process.env.PORT || 4000,
         host: '0.0.0.0'
@@ -15,7 +17,13 @@ export const init = async function (): Promise<Hapi.Server> {
     server.route({
         method: "GET",
         path: "/hello",
-        handler: index
+        handler: (request)=>index(request, bankApplication)
+    });
+
+    server.route({
+        method: "GET",
+        path: "/account/{id}",
+        handler: (request)=>getAccount(request, bankApplication)
     });
 
     return server;
