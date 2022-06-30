@@ -7,7 +7,7 @@ describe('Bank Tests', () => {
     const bank = new Bank()
 
     // When
-    const bobAccount = bank.getAccountByNumber('GB33BUKB20201555555555')
+    const bobAccount = bank.getAccountByIBAN('GB33BUKB20201555555555')
 
     // Then
     expect(bobAccount.owner()).to.equal('Bob Rich')

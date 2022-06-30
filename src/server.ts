@@ -5,10 +5,9 @@ import * as HapiSwagger from 'hapi-swagger'
 import * as Inert from '@hapi/inert'
 import * as Vision from '@hapi/vision'
 
-import {index, getAccount, getTransactions, makeDeposit, makeCheckout, receiveATransfer} from './routes'
 import { Bank } from './Bank'
 import { Server } from '@hapi/hapi'
-import * as Joi from "joi";
+import { routes } from './routes'
 
 export let server: Hapi.Server
 
@@ -20,7 +19,7 @@ export const init = async function (bankApplication: Bank): Promise<Server> {
 
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
-      title: 'Test API Documentation',
+      title: 'Bank Kata API Documentation',
       version: '0.1'
     }
   }
@@ -40,143 +39,7 @@ export const init = async function (bankApplication: Bank): Promise<Server> {
 
   await server.register(plugins)
 
-  // Routes will go here
-  server.route([
-    {
-      method: 'GET',
-      path: '/hello',
-      options: {
-        handler: (request, h) => {
-          return h.response(index())
-        },
-        description: 'Hello Bank Application',
-        notes: ['A healthcheck basic endpoint'],
-        plugins: {
-          'hapi-swagger': {}
-        },
-        tags: ['api']
-      }
-    },
-    {
-      method: 'GET',
-      path: '/account/{id}',
-      options: {
-        handler: (request, h) => {
-          return h.response(getAccount(request, bankApplication))
-        },
-        description: 'Get Client Account',
-        notes: ['Get a client account'],
-        validate: {
-          params: Joi.object({
-            id: Joi.string().required().description('The account id to retrieve')
-          })
-        },
-        plugins: {
-          'hapi-swagger': {
-            payloadType: 'form'
-          }
-        },
-        tags: ['api']
-      }
-    },
-    {
-      method: 'GET',
-      path: '/account/{id}/transactions',
-      options: {
-        handler: (request, h) => {
-          return h.response(getTransactions(request, bankApplication))
-        },
-        description: 'Get Client Account',
-        notes: ['Get a client account'],
-        validate: {
-          params: Joi.object({
-            id: Joi.string().required().description('The account id on which to list transaction')
-          })
-        },
-        plugins: {
-          'hapi-swagger': {
-            payloadType: 'form'
-          }
-        },
-        tags: ['api']
-      }
-    },
-    {
-      method: 'PUT',
-      path: '/account/{id}/deposit',
-      options: {
-        handler: (request, h) => {
-          return h.response(makeDeposit(request, bankApplication))
-        },
-        description: 'Make a deposit',
-        notes: ['Make a deposit'],
-        validate: {
-          params: Joi.object({
-            id: Joi.string().required().description('The account id on which to make a deposit')
-          }),
-          payload: Joi.object({
-            amount: Joi.number().required().description('The amount of the deposit')
-          })
-        },
-        plugins: {
-          'hapi-swagger': {
-            payloadType: 'form'
-          }
-        },
-        tags: ['api']
-      }
-    },
-    {
-      method: 'PUT',
-      path: '/account/{id}/checkout',
-      options: {
-        handler: (request, h) => {
-          return h.response(makeCheckout(request, bankApplication))
-        },
-        description: 'Make a deposit',
-        notes: ['Make a deposit'],
-        validate: {
-          params: Joi.object({
-            id: Joi.string().required().description('The account id on which to make a checkout')
-          }),
-          payload: Joi.object({
-            amount: Joi.number().required().description('The amount of the checkout')
-          })
-        },
-        plugins: {
-          'hapi-swagger': {
-            payloadType: 'form'
-          }
-        },
-        tags: ['api']
-      }
-    },
-    {
-      method: 'POST',
-      path: '/transfer',
-      options: {
-        handler: (request, h) => {
-          return h.response(receiveATransfer(request, bankApplication))
-        },
-        description: 'Make a deposit',
-        notes: ['Make a deposit'],
-        validate: {
-          payload: Joi.object({
-            ibanFrom: Joi.string().required().description('The iban of the transfer destination account'),
-            ibanTo: Joi.string().required().description('The iban of the transfer origin account'),
-            amount: Joi.number().min(0).required().description('The amount of the transfer')
-          })
-        },
-        plugins: {
-          'hapi-swagger': {
-            payloadType: 'form'
-          }
-        },
-        tags: ['api']
-      }
-    }
-
-  ])
+  server.route(routes(bankApplication))
 
   return server
 }

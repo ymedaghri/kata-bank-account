@@ -16,10 +16,12 @@
     "prettier": "^2.7.1"
   },
   "scripts": {
+    "start": "tsc && node dist/app.js",
     "serve": "TS_NODE_FILES=true LOGGER_FORMAT=text nodemon",
     "serve:inspect": "nodemon --exec 'node --inspect --require ts-node/register ./src/main.ts'",
     "test": "NODE_ENV=test mocha -r ts-node/register test/**/*.test.ts",
-    "prettier": "prettier --config .prettierrc \"src/**/*.ts\" \"test/**/*.ts\" --write"
+    "prettier": "prettier --config .prettierrc \"src/**/*.ts\" \"test/**/*.ts\" --write",
+    "build": "tsc -p ./tsconfig.build.json"
   },
   "devDependencies": {
     "@types/chai": "^4.3.1",

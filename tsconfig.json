@@ -4,13 +4,13 @@
     "transpileOnly": true
   },
   "compilerOptions": {
-    "outDir": "./dist",
-    "allowJs": false,
+    "module": "commonjs",
+    "esModuleInterop": true,
     "target": "es6",
-    "sourceMap": true,
-    "module": "CommonJS",
     "moduleResolution": "node",
-    "strict": true
+    "sourceMap": true,
+    "strict": true,
+    "outDir": "./dist"
   },
   "include": ["./src/**/*.ts", "./test/**/*.ts"],
   "exclude": ["node_modules"]

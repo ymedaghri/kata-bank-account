@@ -3,7 +3,7 @@ import { describe, it } from 'mocha'
 import { expect } from 'chai'
 
 import { init, start } from '../src/server'
-import {Bank} from "../src/Bank";
+import { Bank } from '../src/Bank'
 
 describe('smoke test', async () => {
   let server: Server
