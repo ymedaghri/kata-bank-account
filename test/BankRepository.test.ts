@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import { Bank } from '../src/Bank'
+import { BankRepository } from '../src/BankRepository'
 
-describe('Bank Tests', () => {
+describe('BankRepository Tests', () => {
   it('should retrieve an bank account from its number', function () {
     // Given
-    const bank = new Bank()
+    const bank = new BankRepository()
 
     // When
     const bobAccount = bank.getAccountByIBAN('GB33BUKB20201555555555')

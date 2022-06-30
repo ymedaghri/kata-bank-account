@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { StubbedInstance, stubInterface } from 'ts-sinon'
-import { Bank } from '../src/Bank'
 import { BankAccount } from '../src/BankAccount'
+import {Bank} from "../src/Bank";
 
 describe('BankAccount Tests', () => {
   let bank: StubbedInstance<Bank>
@@ -10,6 +10,8 @@ describe('BankAccount Tests', () => {
     bank = stubInterface()
     const bobAccount = new BankAccount('12345', 'Bob')
     bank.getAccountByIBAN.returns(bobAccount)
+    const currentDate = new Date().toISOString()
+    bank.getCurrentDate.returns(currentDate)
   })
 
   it('should retrieve an account balance of zero', function () {
@@ -34,26 +36,22 @@ describe('BankAccount Tests', () => {
   it('should make a checkout and retrieve the correct account balance', function () {
     // Given
     const account = bank.getAccountByIBAN('12345')
-    const dateDeposit = new Date().toISOString()
-    const dateCheckout = new Date().toISOString()
+
     // When
-    account.deposit(150, dateDeposit)
-    account.checkout(200, dateCheckout)
+    account.deposit(150, bank.getCurrentDate())
+    account.checkout(200, bank.getCurrentDate())
 
     // Then
     expect(account.balance()).to.equal(-50)
   })
   it('should return all the transactions made on the account', function () {
     // Given
-    const dateDeposit = new Date().toISOString()
-    const dateCheckout1 = new Date().toISOString()
-    const dateCheckout2 = new Date().toISOString()
     const account = bank.getAccountByIBAN('12345')
 
     // When
-    account.deposit(350, dateDeposit)
-    account.checkout(200, dateCheckout1)
-    account.checkout(100, dateCheckout2)
+    account.deposit(350, bank.getCurrentDate())
+    account.checkout(200, bank.getCurrentDate())
+    account.checkout(100, bank.getCurrentDate())
 
     // Then
     expect(account.transactionList()).to.deep.equal([
@@ -61,27 +59,27 @@ describe('BankAccount Tests', () => {
         accountNumber: '12345',
         amount: 350,
         balance: 350,
-        date: dateDeposit,
+        date: bank.getCurrentDate(),
         from: undefined,
-        transactionNumber: `12345/DEPOSIT/${dateDeposit}`,
+        transactionNumber: `12345/DEPOSIT/${bank.getCurrentDate()}`,
         type: 'DEPOSIT'
       },
       {
         accountNumber: '12345',
         amount: -200,
         balance: 150,
-        date: dateCheckout1,
+        date: bank.getCurrentDate(),
         from: undefined,
-        transactionNumber: `12345/CHECKOUT/${dateCheckout1}`,
+        transactionNumber: `12345/CHECKOUT/${bank.getCurrentDate()}`,
         type: 'CHECKOUT'
       },
       {
         accountNumber: '12345',
         amount: -100,
         balance: 50,
-        date: dateCheckout2,
+        date: bank.getCurrentDate(),
         from: undefined,
-        transactionNumber: `12345/CHECKOUT/${dateCheckout2}`,
+        transactionNumber: `12345/CHECKOUT/${bank.getCurrentDate()}`,
         type: 'CHECKOUT'
       }
     ])

@@ -1,5 +1,7 @@
 import { init, start } from './server'
-import { Bank } from './Bank'
+import { BankRepository } from './BankRepository'
+import {Bank} from "./Bank";
 
-const bankApplication = new Bank()
+const bankRepository = new BankRepository()
+const bankApplication = new Bank(bankRepository)
 init(bankApplication).then(() => start())

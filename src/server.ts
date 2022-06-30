@@ -5,9 +5,9 @@ import * as HapiSwagger from 'hapi-swagger'
 import * as Inert from '@hapi/inert'
 import * as Vision from '@hapi/vision'
 
-import { Bank } from './Bank'
 import { Server } from '@hapi/hapi'
 import { routes } from './routes'
+import {Bank} from "./Bank";
 
 export let server: Hapi.Server
 
@@ -19,7 +19,7 @@ export const init = async function (bankApplication: Bank): Promise<Server> {
 
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
-      title: 'Bank Kata API Documentation',
+      title: 'BankRepository Kata API Documentation',
       version: '0.1'
     }
   }

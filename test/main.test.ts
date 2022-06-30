@@ -3,13 +3,15 @@ import { describe, it } from 'mocha'
 import { expect } from 'chai'
 
 import { init, start } from '../src/server'
-import { Bank } from '../src/Bank'
+import { BankRepository } from '../src/BankRepository'
+import {Bank} from "../src/Bank";
 
 describe('smoke test', async () => {
   let server: Server
 
   before(async () => {
-    server = await init(new Bank())
+    const bankRepository=new BankRepository();
+    server = await init(new Bank(bankRepository))
     await start()
   })
   after(async () => {

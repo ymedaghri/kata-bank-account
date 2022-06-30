@@ -1,7 +1,8 @@
-import { Bank } from './Bank'
+
 import * as Joi from 'joi'
 import { ValidationError } from 'joi'
 import { ResponseToolkit } from '@hapi/hapi'
+import {Bank} from "./Bank";
 
 export function index(): string {
   return 'Hello! Nice to have met you.'
@@ -15,7 +16,7 @@ export const routes = (bankApplication: Bank) => [
       handler: (request: Request, h: ResponseToolkit) => {
         return h.response(index())
       },
-      description: 'Hello Bank Application',
+      description: 'Hello BankRepository Application',
       notes: ['A healthcheck basic endpoint'],
       plugins: {
         'hapi-swagger': {}
@@ -194,7 +195,7 @@ export function makeDeposit(request: any, bankApplication: Bank) {
   } = request
   const account = bankApplication.getAccountByIBAN(id)
 
-  account.deposit(amount, new Date().toISOString())
+  account.deposit(amount, bankApplication.getCurrentDate())
 
   return {
     message: `Deposit of ${amount} made successfully`
@@ -208,7 +209,7 @@ export function makeCheckout(request: any, bankApplication: Bank) {
   } = request
   const account = bankApplication.getAccountByIBAN(id)
 
-  account.checkout(amount, new Date().toISOString())
+  account.checkout(amount, bankApplication.getCurrentDate())
 
   return {
     message: `Checkout of ${amount} made successfully`
@@ -219,7 +220,7 @@ export function receiveATransfer(request: any, bankApplication: Bank) {
   const {
     payload: { ibanFrom, ibanTo, amount }
   } = request
-  const message = bankApplication.makeATransfer(ibanTo, ibanFrom, amount)
+  const message = bankApplication.makeATransfer(ibanTo, ibanFrom, amount, bankApplication.getCurrentDate())
 
   return {
     message
