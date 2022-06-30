@@ -1,5 +1,5 @@
-import { init, start } from "./server";
-import {Bank} from "./Bank";
+import { init, start } from './server'
+import { Bank } from './Bank'
 
 const bankApplication = new Bank()
-init(bankApplication).then(() => start());
+init(bankApplication).then(() => start())

@@ -1,7 +1,7 @@
-import {expect} from "chai";
+import { expect } from 'chai'
 import { StubbedInstance, stubInterface } from 'ts-sinon'
-import { Bank } from "../src/Bank";
-import {BankAccount} from "../src/BankAccount";
+import { Bank } from '../src/Bank'
+import { BankAccount } from '../src/BankAccount'
 
 /*
     Test List
@@ -17,72 +17,72 @@ import {BankAccount} from "../src/BankAccount";
 
  */
 
-describe("BankAccount Tests", () => {
-    let bank:StubbedInstance<Bank>
+describe('BankAccount Tests', () => {
+  let bank: StubbedInstance<Bank>
 
-    beforeEach(()=>{
-        bank=stubInterface()
-        const bobAccount = new BankAccount("12345", "Bob")
-        bank.getAccountByNumber.returns(bobAccount)
-    })
+  beforeEach(() => {
+    bank = stubInterface()
+    const bobAccount = new BankAccount('12345', 'Bob')
+    bank.getAccountByNumber.returns(bobAccount)
+  })
 
-    it('should retrieve an account balance of zero', function () {
-        // Given
-        const account = bank.getAccountByNumber("12345");
+  it('should retrieve an account balance of zero', function () {
+    // Given
+    const account = bank.getAccountByNumber('12345')
 
-        // When- Then
-        expect(account.balance()).to.equal(0);
-    });
+    // When- Then
+    expect(account.balance()).to.equal(0)
+  })
 
-    it('should make a deposit and retrieve the correct account balance', function () {
-        // Given
-        const account = bank.getAccountByNumber("12345");
+  it('should make a deposit and retrieve the correct account balance', function () {
+    // Given
+    const account = bank.getAccountByNumber('12345')
 
-        // When
-        account.deposit(150, "10/10/2021")
+    // When
+    account.deposit(150, '10/10/2021')
 
-        // Then
-        expect(account.balance()).to.equal(150);
-    });
+      // Then
+    expect(account.balance()).to.equal(150)
+  })
 
-    it('should make a checkout and retrieve the correct account balance', function () {
-        // Given
-        const account = bank.getAccountByNumber("12345");
+  it('should make a checkout and retrieve the correct account balance', function () {
+    // Given
+    const account = bank.getAccountByNumber('12345')
 
-        // When
-        account.deposit(150, "10/10/2021")
-        account.checkout(200, "11/10/2021")
+    // When
+    account.deposit(150, '10/10/2021')
+      account.checkout(200, '11/10/2021')
 
-        // Then
-        expect(account.balance()).to.equal(-50);
-    });
-    it('should return all the transactions made on the account', function () {
-        // Given
+    // Then
+    expect(account.balance()).to.equal(-50)
+  })
+  it('should return all the transactions made on the account', function () {
+    // Given
 
-        const account = bank.getAccountByNumber("12345");
+    const account = bank.getAccountByNumber('12345')
 
-        // When
-        account.deposit(350, "10/10/2021")
-        account.checkout(200, "12/10/2021")
-        account.checkout(100, "01/11/2021")
+    // When
+    account.deposit(350, '10/10/2021')
+      account.checkout(200, '12/10/2021')
+    account.checkout(100, '01/11/2021')
 
-        // Then
-        expect(account.transactionList()).to.deep.equal([
-            {
-                "amount": 350,
-                "balance": 350,
-                "date": "10/10/2021"
-            },
-            {
-                "amount": -200,
-                "balance": 150,
-                "date": "12/10/2021"
-            },
-            {
-                "amount": -100,
-                "balance": 50,
-                "date": "01/11/2021"
-            }
-        ]);
-    });
+    // Then
+    expect(account.transactionList()).to.deep.equal([
+      {
+        amount: 350,
+        balance: 350,
+        date: '10/10/2021'
+      },
+      {
+        amount: -200,
+        balance: 150,
+        date: '12/10/2021'
+      },
+      {
+        amount: -100,
+        balance: 50,
+        date: '01/11/2021'
+      }
+    ])
+  })
 })
