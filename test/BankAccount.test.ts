@@ -1,4 +1,6 @@
 import {expect} from "chai";
+import { StubbedInstance, stubInterface } from 'ts-sinon'
+import { Bank } from "../src/Bank";
 import {BankAccount} from "../src/BankAccount";
 
 /*
@@ -16,45 +18,56 @@ import {BankAccount} from "../src/BankAccount";
  */
 
 describe("BankAccount Tests", () => {
+    let bank:StubbedInstance<Bank>
+
+    beforeEach(()=>{
+        bank=stubInterface()
+        const bobAccount = new BankAccount("12345", "Bob")
+        bank.getAccountByNumber.returns(bobAccount)
+    })
+
     it('should retrieve an account balance of zero', function () {
         // Given
-        const bobAccount = new BankAccount("12345")
-        // When
-        // Then
-        expect(bobAccount.balance()).to.equal(0);
+        const account = bank.getAccountByNumber("12345");
+
+        // When- Then
+        expect(account.balance()).to.equal(0);
     });
+
     it('should make a deposit and retrieve the correct account balance', function () {
         // Given
-        const bobAccount = new BankAccount("12345")
+        const account = bank.getAccountByNumber("12345");
 
         // When
-        bobAccount.deposit(150, "10/10/2021")
+        account.deposit(150, "10/10/2021")
 
         // Then
-        expect(bobAccount.balance()).to.equal(150);
+        expect(account.balance()).to.equal(150);
     });
+
     it('should make a checkout and retrieve the correct account balance', function () {
         // Given
-        const bobAccount = new BankAccount("12345")
-        bobAccount.deposit(150, "10/10/2021")
-        bobAccount.checkout(200, "11/10/2021")
+        const account = bank.getAccountByNumber("12345");
 
         // When
+        account.deposit(150, "10/10/2021")
+        account.checkout(200, "11/10/2021")
 
         // Then
-        expect(bobAccount.balance()).to.equal(-50);
+        expect(account.balance()).to.equal(-50);
     });
     it('should return all the transactions made on the account', function () {
         // Given
-        const bobAccount = new BankAccount("12345")
-        bobAccount.deposit(350, "10/10/2021")
-        bobAccount.checkout(200, "12/10/2021")
-        bobAccount.checkout(100, "01/11/2021")
+
+        const account = bank.getAccountByNumber("12345");
 
         // When
+        account.deposit(350, "10/10/2021")
+        account.checkout(200, "12/10/2021")
+        account.checkout(100, "01/11/2021")
 
         // Then
-        expect(bobAccount.transactionList()).to.deep.equal([
+        expect(account.transactionList()).to.deep.equal([
             {
                 "amount": 350,
                 "balance": 350,

@@ -5,7 +5,7 @@ enum TransactionType {
 export class BankAccount {
     private transactions: { type: TransactionType, amount: number, date: string }[]
 
-    constructor(private readonly accountNumber: string) {
+    constructor(private readonly accountNumber: string, private readonly accountOwner: string) {
         this.transactions = []
     }
 
@@ -38,5 +38,9 @@ export class BankAccount {
             });
         })
 
+    }
+
+    owner() {
+        return this.accountOwner
     }
 }
